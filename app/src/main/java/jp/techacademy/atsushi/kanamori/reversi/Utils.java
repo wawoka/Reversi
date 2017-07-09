@@ -6,7 +6,8 @@ public class Utils {
 
     public static final String TAG = "Reversi";
 
-    public static void d(String msg) {
+    public static void d(String msg){
         Log.d(TAG, msg);
     }
+
 }

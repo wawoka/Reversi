@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="jp.techacademy.atsushi.kanamori.reversi">
+    package="jp.techacademy.atsushi.kanamori.reversi"
     android:versionCode="1"
     android:versionName="0.3"
     >
@@ -10,12 +10,12 @@
     	　http://y-anz-m.blogspot.com/2010/02/android-multi-screen.html
     	　http://y-anz-m.blogspot.com/2010/05/androiddimension.html
    	-->
-    <uses-sdk android:minSdkVersion="3" android:targetSdkVersion="4" />
-    <supports-screens
-        android:smallScreens="true"
-        android:normalScreens="true"
-        android:largeScreens="true"
-        android:anyDensity="true" />
+    <!--     <uses-sdk android:minSdkVersion="3" android:targetSdkVersion="3"/> -->
+    <!-- 	<supports-screens   -->
+    <!--     	android:smallScreens="true"   -->
+    <!--     	android:normalScreens="true"   -->
+    <!--     	android:largeScreens="true"   -->
+    <!--     	android:anyDensity="true" />   -->
 
     <application
         android:icon="@drawable/icon"

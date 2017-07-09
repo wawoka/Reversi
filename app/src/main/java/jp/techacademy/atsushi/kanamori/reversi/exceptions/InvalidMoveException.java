@@ -6,16 +6,16 @@ public class InvalidMoveException extends Exception {
 
     String mMsg = "Invalid move.";
 
-    public InvalidMoveException() {
-
+    public InvalidMoveException(){
+        //
     }
 
-    public InvalidMoveException(String msg) {
+    public InvalidMoveException(String msg){
         mMsg = msg;
     }
 
     @Override
-    public String getMessage() {
+    public String getMessage(){
         return mMsg;
     }
 }

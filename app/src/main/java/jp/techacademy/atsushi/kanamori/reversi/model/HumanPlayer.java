@@ -1,8 +1,10 @@
 package jp.techacademy.atsushi.kanamori.reversi.model;
 
+import jp.techacademy.atsushi.kanamori.reversi.model.Cell.E_STATUS;
+
 public class HumanPlayer extends Player {
 
-    public HumanPlayer(Cell.E_STATUS turn, String name, Board board) {
+    public HumanPlayer(E_STATUS turn, String name, Board board){
         super(turn, name, board);
     }
 
@@ -18,6 +20,9 @@ public class HumanPlayer extends Player {
 
     @Override
     public void stopThinking() {
-        // Do nothing.
+        //Do nothing.
     }
+
+
+
 }

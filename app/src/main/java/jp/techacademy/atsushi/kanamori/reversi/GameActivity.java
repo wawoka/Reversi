@@ -1,39 +1,65 @@
 package jp.techacademy.atsushi.kanamori.reversi;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
+import android.widget.TextView;
 
-public class GameActivity extends Activity {
+public class GameActivity extends Activity{
 
-    ReversiView reversiview = null;
+    ReversiView mReversiView = null;
+    Animation mAnimWinner = null;
+    Animation mAnimFadeOut = null;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_game);
+
         Utils.d("GameActivity.onCreate");
 
-        reversiview = new ReversiView(this);
-        setContentView(reversiview);
+        mAnimWinner = AnimationUtils.loadAnimation(this, R.anim.winner);
+        mAnimFadeOut = AnimationUtils.loadAnimation(this, R.anim.fadeout);
+
+        setContentView(R.layout.main);
+        mReversiView = new ReversiView(this);
+        ArrayList<View> arr = new ArrayList<View>();
+        arr.add(mReversiView);
+
+        FrameLayout frame;
+        frame = (FrameLayout)this.findViewById(R.id.frame);
+        frame.addView(mReversiView, 0);			//一番奥にReversiViewを追加。
+
+        TextView txt = (TextView)findViewById(R.id.txtWinner);
+        txt.bringToFront();
     }
 
     @Override
     protected void onPause() {
         Utils.d("GameActivity.onPause");
-        Pref.setState(this.getApplicationContext(), reversiview.getState());
 
-        reversiview.pause();
+        Pref.setState(this.getApplicationContext(), mReversiView.getState());
+
+        //別スレッドで思考ルーチンが動いていれば中断する。
+        mReversiView.pause();
+
         super.onPause();
     }
 
     @Override
     protected void onResume() {
         Utils.d("GameActivity.onResume");
-        reversiview.resume(Pref.getState(this.getApplicationContext()));
+
+        mReversiView.resume(Pref.getState(this.getApplicationContext()));
+
         super.onResume();
     }
 
@@ -46,18 +72,18 @@ public class GameActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
+        switch (item.getItemId()){
             case R.id.mnuExit:
                 finish();
                 break;
             case R.id.mnuPref:
                 openPref();
                 break;
-            case R.id.mnuStat:
-                reversiview.showCountsToast();
-                break;
+//		case R.id.mnuStat:
+//			mReversiView.showCountsToast();
+//			break;
             case R.id.mnuInit:
-                reversiview.init(true);
+                mReversiView.init(true);
                 break;
             default:
                 break;
@@ -65,8 +91,40 @@ public class GameActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    //設定画面を開く
     private void openPref() {
         Intent intent = new Intent(this, Pref.class);
         startActivity(intent);
+    }
+
+    public void showWinner(String msg){
+        TextView txt = (TextView)findViewById(R.id.txtWinner);
+        txt.setText(msg);
+        if (txt.getVisibility() == View.INVISIBLE){
+            txt.setVisibility(View.VISIBLE);
+            txt.startAnimation(mAnimWinner);
+        }
+
+        View vwBack = (View)findViewById(R.id.vwBack);
+        if (vwBack.getVisibility() == View.INVISIBLE){
+            Animation anim = AnimationUtils.loadAnimation(this, R.anim.grayin);
+            vwBack.startAnimation(anim);
+            vwBack.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void hideWinner(String msg){
+        TextView txt = (TextView)findViewById(R.id.txtWinner);
+        if (txt.getVisibility() == View.VISIBLE){
+            txt.startAnimation(mAnimFadeOut);
+            txt.setVisibility(View.INVISIBLE);
+        }
+
+        View vwBack = (View)findViewById(R.id.vwBack);
+        if (vwBack.getVisibility() == View.VISIBLE){
+            Animation anim = AnimationUtils.loadAnimation(this, R.anim.grayout);
+            vwBack.startAnimation(anim);
+            vwBack.setVisibility(View.INVISIBLE);
+        }
     }
 }

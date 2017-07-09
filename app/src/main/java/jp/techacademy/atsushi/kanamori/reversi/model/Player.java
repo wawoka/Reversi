@@ -4,7 +4,6 @@ import android.content.Context;
 import jp.techacademy.atsushi.kanamori.reversi.Pref;
 import jp.techacademy.atsushi.kanamori.reversi.model.Cell.E_STATUS;
 
-
 public abstract class Player {
 
     protected E_STATUS mTurn;
@@ -14,7 +13,8 @@ public abstract class Player {
     private int mProgress;
     private Cell mCurrentCell;
 
-    public Player(E_STATUS turn, String name, Board board) {
+
+    public Player(E_STATUS turn, String name, Board board){
         setTurn(turn);
         setName(name);
         mBoard = board;
@@ -41,13 +41,13 @@ public abstract class Player {
     public abstract void startThinking(IPlayerCallback callback);
     public abstract void stopThinking();
 
-    private static final Player getPlayer(String name, Board board, E_STATUS turn, String value) {
+    private static final Player getPlayer(String name, Board board, E_STATUS turn, String value){
         int int_value = Integer.valueOf(value);
         Player player;
-        switch (int_value) {
-//            case 0:
-//                player = new ComputerPlayerLevel0(turn, name, board);
-//                break;
+        switch (int_value){
+//		case 0:
+//			player = new ComputerPlayerLevel0(turn, name, board);
+//			break;
             case 1:
                 player = new ComputerPlayerLevel1(turn, name, board);
                 break;
@@ -58,19 +58,18 @@ public abstract class Player {
                 player = new ComputerPlayerLevel3(turn, name, board);
                 break;
             default:
-                player = new HumanPlayer(turn, name, board);
-
+                player = new HumanPlayer(turn, name,board);
         }
         return player;
     }
 
-    public static final Player getPlayer1(Context con, Board board, E_STATUS turn) {
+    public static final Player getPlayer1(Context con, Board board, E_STATUS turn){
         String name = Pref.getPlayer1Name(con);
         String value = Pref.getPlayer1(con);
         return getPlayer(name, board, turn, value);
     }
 
-    public static final Player getPlayer2(Context con, Board board, E_STATUS turn) {
+    public static final Player getPlayer2(Context con, Board board, E_STATUS turn){
         String name = Pref.getPlayer2Name(con);
         String value = Pref.getPlayer2(con);
         return getPlayer(name, board, turn, value);
@@ -91,4 +90,6 @@ public abstract class Player {
     public Cell getCurrentCell() {
         return mCurrentCell;
     }
+
 }
+

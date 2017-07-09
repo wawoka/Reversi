@@ -51,17 +51,21 @@ public class Board {
 
     public void setSize(int w, int h){
         int sz = w < h ? w: h;						//正方形になる様に小さいほうに合わせる。
-
-        this.rect.right = this.rect.left + (int)(sz / Board.COLS) * Board.COLS;		//列数で割り切れない場合は余りを捨てる。
-        this.rect.bottom = this.rect.top + (int)(sz / Board.ROWS) * Board.ROWS;		//行数で割り切れない場合は余りを捨てる。
+        sz = (int)(sz * 0.980f);
+        sz =  (int)(sz / Board.COLS) * Board.COLS;		//列数で割り切れない場合は余りを捨てる。
+        int border = (w < h ? (w - sz) : (h - sz) ) / 2;
+        this.rect.left = border;
+        this.rect.top = border;
+        this.rect.right = this.rect.left + sz;
+        this.rect.bottom = this.rect.top + sz;
 
         float cellW = this.getCellWidth();
-        float cellH = this.getCellHeidht();
+        float cellH = this.getCellHeight();
 
         for (int i = 0; i < ROWS; i++) {
             for (int j = 0; j < COLS; j++) {
-                cells[i][j].setLeft(j * cellW);
-                cells[i][j].setTop(i * cellH);
+                cells[i][j].setLeft(j * cellW + this.rect.left);
+                cells[i][j].setTop(i * cellH + this.rect.top);
                 cells[i][j].setWidth(cellW);
                 cells[i][j].setHeight(cellH);
             }
@@ -83,7 +87,7 @@ public class Board {
         return this.rect.width() / (float)COLS;
     }
 
-    public float getCellHeidht(){
+    public float getCellHeight(){
         return this.rect.height() / (float)ROWS;
     }
 
@@ -197,6 +201,17 @@ public class Board {
             }
         }
         return n;
+    }
+
+    public Player getWinner(){
+        E_STATUS w = getWinnerStatus();
+        if (w == E_STATUS.None){
+            return null;
+        } else if (w == E_STATUS.Black){
+            return this.getPlayer1();
+        } else {
+            return this.getPlayer2();
+        }
     }
 
     public Cell.E_STATUS getWinnerStatus(){
